@@ -3,6 +3,7 @@ package com.AnkApp.journalApp.controller;
 
 import com.AnkApp.journalApp.entity.User;
 import com.AnkApp.journalApp.service.UserService;
+import com.AnkApp.journalApp.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private WeatherService weatherService;
 
     @PutMapping("update")
     public ResponseEntity<?> updateUser(@RequestBody User user) {
@@ -37,6 +40,12 @@ public class UserController {
         String userName = authentication.getName();
         userService.deleteByUserName(userName);
         return new ResponseEntity<>("User Deleted Successfully", HttpStatus.OK);
+    }
+
+    @GetMapping("getWeather")
+    public ResponseEntity<?> getWeather() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return new ResponseEntity<>(weatherService.getWeather(), HttpStatus.OK);
     }
 }
 
