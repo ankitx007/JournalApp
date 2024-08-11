@@ -26,16 +26,24 @@ public class WeatherService {
     @Autowired
     private AppCache appCache;
 
+    @Autowired
+    private RedisService redisService;
+
     public WeatherResponse getWeather() {
-        String weatherApi = appCache.AppCache.get(AppCache.keys.WEATHER_API.toString());
-        String finalAPI = weatherApi.replace(Placeholders.API_KEY, apiKey);
-        ResponseEntity<WeatherResponse> response = null;
-        try {
-            response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
-        } catch (Exception e) {
-            log.info("Error occurred sir", e);
-        }
-        WeatherResponse body = response.getBody();
+        WeatherResponse weatherResponse = redisService.get("weather", WeatherResponse.class);
+        if (weatherResponse != null) {
+            return weatherResponse;
+        } else {
+            String weatherApi = appCache.AppCache.get(AppCache.keys.WEATHER_API.toString());
+            String finalAPI = weatherApi.replace(Placeholders.API_KEY, apiKey);
+            ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalAPI, HttpMethod.GET, null, WeatherResponse.class);
+            WeatherResponse body = response.getBody();
+
+            if(body != null){
+                redisService.set("weather", body, 300l);
+            }
         return body;
+        }
+
     }
 }
