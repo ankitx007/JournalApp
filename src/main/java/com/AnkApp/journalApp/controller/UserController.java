@@ -47,6 +47,14 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return new ResponseEntity<>(weatherService.getWeather(), HttpStatus.OK);
     }
+
+
+    @PostMapping("create-user")
+    public ResponseEntity<?> createUser(@RequestBody User user){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return new ResponseEntity<>(userService.saveNewUser(user), HttpStatus.OK);
+    }
+
 }
 
 //Best Practise

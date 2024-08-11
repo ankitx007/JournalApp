@@ -4,6 +4,7 @@ package com.AnkApp.journalApp.cache;
 import com.AnkApp.journalApp.entity.ConfigJournalAppEntity;
 import com.AnkApp.journalApp.repository.ConfigJournalAppRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
